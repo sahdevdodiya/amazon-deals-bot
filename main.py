@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from telegram import Bot
 from apscheduler.schedulers.blocking import BlockingScheduler
+import pytz  # ✅ Add this
 
 bot_token = "7667300588:AAHUT5LgzqtYRs2oeC0VwF42nJSOkGKtL-0"
 chat_id = "5663591941"
@@ -30,6 +31,9 @@ def send_deals_to_telegram():
     for deal in deals:
         bot.send_message(chat_id=chat_id, text=deal)
 
-scheduler = BlockingScheduler()
+# ✅ Set timezone using pytz (India or UTC)
+timezone = pytz.timezone("Asia/Kolkata")  # or "UTC"
+
+scheduler = BlockingScheduler(timezone=timezone)
 scheduler.add_job(send_deals_to_telegram, 'interval', hours=1)
 scheduler.start()
